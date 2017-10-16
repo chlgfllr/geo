@@ -1,0 +1,44 @@
+---
+title: "ABXpy"
+author: "Chloé Gfeller"
+date: "16 octobre 2017"
+output: html_document
+---
+## ABXpy thing  
+
+Package designed by Schatz T., Bach F. and Dupoux E. (maybe someone else?) available on [their Github page](http://github.com/bootphon/ABXpy).  
+Used on a Ubuntu bash on a Windows 10 system.  
+
+### Required packages  
+Need to install [features_extraction](http://github.com/bootphon/features_extraction), [h5features](http://github.com/bootphon/h5features), and of course [ABXpy](http://github.com/bootphon/ABXpy).  
+
+### What does it do?  
+With these tools, we build a ABX-type discrimination test that is run on features automatically extracted from the acoustic signal.  
+*Note*: it should also be possible to add information from a corresponding EGG signal, provided that time indices correspond.  
+
+## Notes on how we used the ABXpy package  
+### Sound files  
+This package is used on Georgian recordings, in order to investigate which are the acoustic features most prevalent in the signal when Georgian native speakers pronounce plain aspirated and ejective stops at three corresponding places of articulation: bilabial, coronal, velar.  
+Two speakers were recorded, they uttered a few hundreds of carrier sentences each, out of which we extract acoustic (and up to some point, articulatory) information. Together, it represents 512 utterances, with a total of 505 ejectives in intervocalic position.  
+The files were recorded at a sampling frequency of 44000Hz, and later resampled on Praat at 16000Hz. The script used to resample all the sound files is `resampling.praat`, located at `C:\Users\chloe_000\OneDrive\Documents\M2\2017-2018\georgian_suite\audio files\resampling.praat`.  
+
+### Time indices  
+Extracted from Textgrids created in 2016-2017. Those had 6 tiers.  
+The information retrieved here consists of:  
+1. onset of the ejective, defined as the offset of the preceding vowel's second formant;  
+2. offset of the following vowel, defined as the offset of the subsequent vowel's second formant.  
+The reason to do so is that most of the acoustic information relevant to the acoustic categorization is located in the vowel-part of the sounds. For the record, in the segmentation criteria I used, the burst noise is part of the vowel, since the consonant part ends at the release of *the burst* (Which one, btw?). As it is assumed that most important information will be found in the burst noise and the quality or amount of glottalization, but so as not to discard other information (like constriction duration), both consonant and subsequent vowel parts are considered.  
+
+### Task module  
+Builds the actual task. Requires two things:  
+1. a `data.item` file, which is a space-separated values table with five columns:  
+
+`#file` | onset | offset | `#item` | phone  
+------- | ----- | ------ | ------- | -----  
+geo020s08a0016v01 | 0.643325 | 0.879655 | #i1 | t>a  
+
+in which `#file` is the name of the sound file, `onset` is the time of stop onset, `offset` is the time of vowel offset, `#item` is a unique identifier for the item, and `phone` is the transcription of the sequence.  
+
+This generates a `data.abx` file for the next step, via the command line:  
+`python task.py data.item -o column1 -a column2 column3 -b column4 column5`
+
