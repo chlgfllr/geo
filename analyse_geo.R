@@ -32,3 +32,16 @@ my.dataset$q_or_a[my.dataset$q_or_a == "2"] <- "a"
 
 ## Save the modified dataset as a csv file
 write.table(my.dataset, "modified_items_020.csv", sep = ",")
+
+
+
+########################
+## Modification of the data_not_invisible.item file
+data.item <- read.table("data_not_invisible.item", sep = "", header = T, comment.char = "@")
+## Creation d'une colonne pour la variable question or answer
+data.item$question <- substr(data.item$X.file, 17, 17)
+data.item$question <- as.character(data.item$question)
+data.item$question[data.item$question == "1"] <- "q"
+data.item$question[data.item$question == "2"] <- "a"
+data.item
+write.table(data.item, "data_new.item", sep = " ", row.names = F, quote = F)
