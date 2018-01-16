@@ -1,6 +1,8 @@
 # If needed
-# library(plyr)
+library(plyr)
 
+########################################################################
+# Files
 distances <- readr::read_delim("by_vowel_distances_initial.txt", " ")
 item <- readr::read_delim("data_initial.item", " ")
 
@@ -13,7 +15,7 @@ sort_dist_score <- dplyr::bind_cols(sort_dist_score, score)
 sort_dist_score_ <- t(apply(sort_dist_score, 1, sort))
 sort_dist_score__ <- dplyr::as_tibble(sort_dist_score_)
 sort_dist_score___ <- dplyr::arrange(sort_dist_score__, V2)
-# 2317 rows 
+# 2317 actual pairs tested 
 dist_sorted_score <- unique(sort_dist_score___)
 
 how_many_repetitons <- sort_dist_score___
@@ -26,6 +28,15 @@ which_not_duplicated <- subset(score_repetitions, V1=="1")
 which_not_duplicated$V21 <- NULL
 which_not_duplicated$V31 <- NULL
 which_not_duplicated$V1 <- NULL
+
+# In the data, there are 2289 duplicated pairs
+which_duplicated <- subset(score_repetitions, V1=="2")
+which_duplicated$V21 <- NULL
+which_duplicated$V31 <- NULL
+which_duplicated$V1 <- NULL
+
+# Et on a bien le nombre de paires présentes dans le tableau de base
+2289*2+28
 
 #########################################################################
 # Now what are the pairs tested? 
@@ -59,3 +70,5 @@ distance_score <- dplyr::select(distances, dplyr::starts_with("d"))
 
 # Met tout dans un meme tibble
 distances_better <- dplyr::bind_cols(item_A_clean, item_B_clean, distance_score)
+# Save file
+write.table(distances_better, "distances_better.csv", sep = ";", row.names = F, col.names = T, quote = F)
