@@ -81,13 +81,28 @@ names(distances_better)[which(names(distances_better)=="#item_B")] <- "item_B"
 how_many_repetitons_all <- ddply(.data = distances_better,.(item_A,item_B),nrow)
   
 # Create subsets
-some_speaker_column <- dplyr::select(distances_better, dplyr::starts_with("speaker"))
-some_phone_columns <- dplyr::select(distances_better, dplyr::starts_with("phone"))
-some_distance_column <- dplyr::select(distances_better, dplyr::starts_with("d"))
-some_table <- dplyr::bind_cols(how_many_repetitons_all, some_speaker_column, some_phone_columns, some_distance_column)
+speaker_column <- dplyr::select(distances_better, dplyr::starts_with("speaker"))
+phone_columns <- dplyr::select(distances_better, dplyr::starts_with("phone"))
+distance_column <- dplyr::select(distances_better, dplyr::starts_with("d"))
+better_table_distances <- dplyr::bind_cols(how_many_repetitons_all, speaker_column, phone_columns, distance_column)
 
 # Plot the results
-some_plot <- ggplot2::ggplot(data=some_table, ggplot2::aes(x=`d(A, B)`)) +
+some_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=`d(A, B)`)) +
   geom_histogram() +
   facet_wrap(~ speaker, scales = 'free_y')
 print(some_plot)
+
+better_table_distances$glottal_A <- ifelse(grepl(">", better_table_distances$phone_A), "ejective", "aspirate")
+better_table_distances$glottal_B <- ifelse(grepl(">", better_table_distances$phone_B), "ejective", "aspirate")
+better_table_distances$same_value <- better_table_distances$glottal_A == better_table_distances$glottal_B
+better_table_distances$same_value <- ifelse(better_table_distances$same_value == "FALSE", "contrast", "same")
+
+# better_table_distances$contrast_tested <- better_table_distances$same_value
+# better_table_distances$contrast_tested <- ifelse(better_table_distances$glottal_A == "ejective", "ejective", "aspirate")
+
+some_other_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=`d(A, B)`)) +
+  geom_histogram() +
+  geom_vline(data = better_table_distances, aes(xintercept=median(better_table_distances$`d(A, B)`), color="red")) +
+  facet_wrap(same_value ~ speaker, scales = 'free_y') 
+
+print(some_other_plot)
