@@ -72,3 +72,22 @@ distance_score <- dplyr::select(distances, dplyr::starts_with("d"))
 distances_better <- dplyr::bind_cols(item_A_clean, item_B_clean, distance_score)
 # Save file
 write.table(distances_better, "distances_better.csv", sep = ";", row.names = F, col.names = T, quote = F)
+
+
+
+# Create a new table with fewer information                   
+names(distances_better)[which(names(distances_better)=="#item_A")] <- "item_A"
+names(distances_better)[which(names(distances_better)=="#item_B")] <- "item_B"
+how_many_repetitons_all <- ddply(.data = distances_better,.(item_A,item_B),nrow)
+  
+# Create subsets
+some_speaker_column <- dplyr::select(distances_better, dplyr::starts_with("speaker"))
+some_phone_columns <- dplyr::select(distances_better, dplyr::starts_with("phone"))
+some_distance_column <- dplyr::select(distances_better, dplyr::starts_with("d"))
+some_table <- dplyr::bind_cols(how_many_repetitons_all, some_speaker_column, some_phone_columns, some_distance_column)
+
+# Plot the results
+some_plot <- ggplot2::ggplot(data=some_table, ggplot2::aes(x=`d(A, B)`)) +
+  geom_histogram() +
+  facet_wrap(~ speaker, scales = 'free_y')
+print(some_plot)
