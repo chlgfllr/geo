@@ -6,6 +6,5 @@ output: html_document
 library(readr)
 my.dataset <- read_delim("items_020.csv", ";", 
     escape_double = FALSE, trim_ws = TRUE)
-View(my.dataset)
 ```
 

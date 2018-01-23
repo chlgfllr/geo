@@ -1,0 +1,180 @@
+---
+title: "Distances"
+output: html_document
+---
+
+```{r}
+library(plyr)
+library(ggplot2)
+```
+
+# What is this  
+Utilisation du fichier txt extrait après application du script dis2text.py (author = Thomas Schatz). S'utilise avec la syntaxe suivante :  
+`python dis2txt.py data.abx data.distance output.txt`  
+
+On obtient un fichier txt dans lequel sont inscrits les noms des fichiers, les onset et offset de la fenêtre considérée, et la distance (dynamic time warping). Ce markdown keeps track des modifications ultérieures apportées à ce txt pour l'utiliser dans R. 
+
+# Chargement des fichiers qu'on va utiliser  
+```{r}
+distances <- readr::read_delim("by_vowel_distances_initial.txt", " ")
+item <- readr::read_delim("data_initial.item", " ")
+```
+
+Le fichier `distances` est le fichier txt qu'on a extrait via dis2txt. Il correspond ici aux distances de la task dans laquelle :  
+
+* Les items testés sont en position initiale  
+* Les triplettes sont ainsi formées :
+    * On = pulm
+    * By = speaker, question, vowel, place  
+    
+Ce qui veut dire que A, B, et X ont la même valeur pour les paramètres suivants :  
+
+paramètre | modalité  
+------- | ------------------ 
+speaker | she (s08) / he (s09)  
+question | question / answer
+vowel | a / e / i / o / u  
+place | bilabial / coronal / velar  
+
+A et X partagent la même modalité de 'pulm', B est différent. Donc on teste la discriminabilité des éjectives et des aspirées. 
+
+# Modification des champs du fichier distances  
+## Combien de paires uniques testées en tout ?  
+On voit que plusieurs paires ont été testées deux fois. Mais combien de actual paires ont été testées ?  
+
+```{r}
+names(distances)[which(names(distances)=="d(A, B)")] <- "dist"
+sort_dist_score <- dplyr::select(distances, dplyr::starts_with("file"))
+score <- dplyr::select(distances, dplyr::starts_with("d"))
+sort_dist_score <- dplyr::bind_cols(sort_dist_score, score)
+sort_dist_score_ <- t(apply(sort_dist_score, 1, sort))
+sort_dist_score__ <- dplyr::as_tibble(sort_dist_score_)
+sort_dist_score___ <- dplyr::arrange(sort_dist_score__, V2)
+dist_sorted_score <- unique(sort_dist_score___)
+```
+
+On a au total 2317 paires testées.
+
+## Combien de paires n'ont pas été dupliquées ?  
+```{r}
+how_many_repetitons <- sort_dist_score___
+how_many_repetitons <- ddply(.data = how_many_repetitons,.(V2,V3),nrow)
+# Just to make sure the distance scores are matched to the right pairs
+scores_unique <- dist_sorted_score
+score_repetitions <- dplyr::bind_cols(how_many_repetitons, scores_unique)
+# If yes: 
+which_not_duplicated <- subset(score_repetitions, V1=="1")
+which_not_duplicated$V21 <- NULL
+which_not_duplicated$V31 <- NULL
+which_not_duplicated$V1 <- NULL
+```
+
+28 paires n'ont pas été dupliquées  
+
+## Et au contraire, combien ont bien été dupliquées ?  
+```{r}
+which_duplicated <- subset(score_repetitions, V1=="2")
+which_duplicated$V21 <- NULL
+which_duplicated$V31 <- NULL
+which_duplicated$V1 <- NULL
+```
+
+On a 2289 paires dupliquées 
+
+## Vraiment ?
+$=2289*2+28$, on a bien le nombre de rows dans le tableau initial  
+
+# Utilisation du fichier items et représentation graphique  
+```{r}
+item_B <- dplyr::select(distances, dplyr::ends_with("_B"))
+item_B_ <- dplyr::inner_join(item_B, item, by=c(file_B="#file", onset_B="onset", offset_B="offset"))
+item_B__ <- dplyr::rename_at(item_B_, names(item_B_)[!endsWith(names(item_B_), "_B")], function(x) paste0(x, "_B"))
+
+item_A <- dplyr::select(distances, dplyr::ends_with("_A"))
+item_A_ <- dplyr::inner_join(item_A, item, by=c(file_A="#file", onset_A="onset", offset_A="offset"))
+item_A__ <- dplyr::rename_at(item_A_, names(item_A_)[!endsWith(names(item_A_), "_A")], function(x) paste0(x, "_A"))
+```
+
+Prepare les colonnes qui m interessent dans A et B
+```{r}
+item_B_clean <- item_B__
+item_B_clean$pulm_B <- NULL
+item_B_clean$place_B <- NULL
+item_B_clean$vowel_B <- NULL
+item_B_clean$position_B <- NULL
+colnames(item_B_clean)[colnames(item_B_clean)=="speaker_B"] <- "speaker"
+colnames(item_B_clean)[colnames(item_B_clean)=="question_B"] <- "question"
+
+item_A_clean <- item_A__
+item_A_clean$pulm_A <- NULL
+item_A_clean$place_A <- NULL
+item_A_clean$vowel_A <- NULL
+item_A_clean$position_A <- NULL
+item_A_clean$speaker_A <- NULL
+item_A_clean$question_A <- NULL
+```
+
+Selectionne le distance score  
+```{r}
+distance_score <- dplyr::select(distances, dplyr::starts_with("d"))
+```
+
+Met tout dans un meme tibble
+```{r}
+distances_better <- dplyr::bind_cols(item_A_clean, item_B_clean, distance_score)
+```
+
+Maintenant on crée un nouveau tableau avec moins d'information superflue
+```{r}
+names(distances_better)[which(names(distances_better)=="#item_A")] <- "item_A"
+names(distances_better)[which(names(distances_better)=="#item_B")] <- "item_B"
+how_many_repetitons_all <- ddply(.data = distances_better,.(item_A,item_B),nrow)
+```
+Et on sélectionne seulement les colonnes qui nous intéressent
+```{r}
+speaker_column <- dplyr::select(distances_better, dplyr::starts_with("speaker"))
+phone_columns <- dplyr::select(distances_better, dplyr::starts_with("phone"))
+distance_column <- dplyr::select(distances_better, dplyr::starts_with("d"))
+question_column <- dplyr::select(distances_better, dplyr::starts_with("ques"))
+better_table_distances <- dplyr::bind_cols(how_many_repetitons_all, speaker_column, phone_columns, distance_column, question_column)
+```
+
+Premier essai de représentation graphique de ce qu'on vient de faire : comment sont répartis les distance scores pour chaque locuteur ?  
+```{r}
+some_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=dist)) +
+  ggplot2::geom_histogram() +
+  ggplot2::facet_wrap(~ speaker) #, scales = 'free_y')
+print(some_plot)
+```
+
+Okay. Maintenant est ce qu'on peut affiner tout ça ? Par exemple, est-ce qu'il y a une différence en fonction du contraste testé (pulm1-pulm1 ou pulm1-pulm2) ?  
+On crée une nouvelle colonne  
+```{r}
+better_table_distances$glottal_A <- ifelse(grepl(">", better_table_distances$phone_A), "ejective", "aspirate")
+better_table_distances$glottal_B <- ifelse(grepl(">", better_table_distances$phone_B), "ejective", "aspirate")
+better_table_distances$same_value <- better_table_distances$glottal_A == better_table_distances$glottal_B
+better_table_distances$same_value <- ifelse(better_table_distances$same_value == "FALSE", "contrast", "same")
+```
+
+Et aussi un nouveau graphique
+
+```{r}
+some_other_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=dist)) +
+  ggplot2::geom_histogram() +
+  ggplot2::geom_vline(data = better_table_distances, xintercept=median(better_table_distances$dist, color = "red")) +
+  ggplot2::facet_wrap(same_value ~ speaker) #, scales = 'free_y') 
+
+print(some_other_plot)
+```
+
+Et enfin, créons un boxplot pour voir mieux la répartition des distances. Mais cette fois on prend en compte tout plein de paramètres : speaker, question, same_value. 
+```{r}
+labels <- c(a = "Answer", q = "Question")
+new_plot <- ggplot2::ggplot(better_table_distances, ggplot2::aes(x = as.factor(speaker), y=dist, fill=same_value)) +
+  ggplot2::geom_boxplot() + 
+  ggplot2::facet_grid(~question, labeller = labeller(question = labels)) +
+  ggplot2::theme_minimal() +
+  ggplot2::scale_fill_discrete(name="Condition tested", labels=c("Ejective-Aspirate", "Ejective-Ejective,\n or Aspirate-Aspirate"))
+
+print(new_plot)
+```
