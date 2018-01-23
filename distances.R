@@ -108,8 +108,11 @@ some_other_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=d
 # On voit qu'il y a une difference assez evidente de distribution des resultats entre les deux speakers, mais pas forcement en fonction du contraste teste
 print(some_other_plot)
 
+labels <- c(a = "Answer", q = "Question")
 new_plot <- ggplot2::ggplot(better_table_distances, ggplot2::aes(x = as.factor(speaker), y=dist, fill=same_value)) +
   ggplot2::geom_boxplot() + 
-  ggplot2::facet_wrap(~question)
+  ggplot2::facet_grid(~question, labeller = labeller(question = labels)) +
+  ggplot2::theme_minimal() +
+  ggplot2::scale_fill_discrete(name="Condition tested", labels=c("Ejective-Aspirate", "Ejective-Ejective,\n or Aspirate-Aspirate"))
 # Grosse difference entre les speakers
 print(new_plot)
