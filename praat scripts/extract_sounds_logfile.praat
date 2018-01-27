@@ -10,13 +10,13 @@
 
 form Get pitch formants and duration from labeled segments in files
 	comment Directory of sound files. Be sure to include the final "/"
-	text sound_directory /Users/chloe/Desktop/test_praat/
+	text sound_directory /Users/chloe/OneDrive/Documents/M2/2017-2018/georgian_suite/audio_files/resampled/
 	sentence Sound_file_extension .wav
 	comment Directory of TextGrid files. Be sure to include the final "/"
-	text textGrid_directory /Users/chloe/Desktop/test_praat/
+	text textGrid_directory /Users/chloe/OneDrive/Documents/M2/2017-2018/georgian_suite/audio_files/resampled/
 	sentence TextGrid_file_extension .TextGrid
 	comment Full path of the resulting text file:
-	text resultsfile /Users/chloe/Desktop/test_praat/resultsfile.txt
+	text resultsfile /Users/chloe/Desktop/test_praat/data.item
 	comment Which tier do you want to analyze?
 	integer Tier 3
 endform
@@ -101,8 +101,7 @@ for ifile to numberOfFiles
             
                         select Sound 'soundname$'
                         Extract part: sequence_start, sequence_end, "rectangular", 1, "yes"
-                        Write to WAV file... 'sound_directory$'/items/'ifile'.wav
-        
+                        Write to WAV file... /Users/chloe/Desktop/test_praat/items/'ifile'.wav
                  
                         fileappend "'resultsfile$'" 'ref$' 'start:6' 'end:6' 'ifile' 'sequence$' 'type$' 'place$' 'vowel$' 'kel_syll$' 'speaker$' 'question$' 'echo$' 'newline$'
 
@@ -142,7 +141,7 @@ for ifile to numberOfFiles
             
                         select Sound 'soundname$'
                         Extract part: sequence_start, sequence_end, "rectangular", 1, "yes"
-                        Write to WAV file... 'sound_directory$'/items/'ifile'.wav
+                        Write to WAV file... /Users/chloe/Desktop/test_praat/items/'ifile'.wav
                          
                         fileappend "'resultsfile$'" 'ref$' 'start:6' 'end:6' 'ifile' 'sequence$' 'type$' 'place$' 'vowel$' 'kel_syll$' 'speaker$' 'question$' 'echo$' 'newline$'
 
@@ -182,8 +181,7 @@ for ifile to numberOfFiles
             
                         select Sound 'soundname$'
                         Extract part: sequence_start, sequence_end, "rectangular", 1, "yes"
-                        Write to WAV file... 'sound_directory$'/items/'ifile'.wav
-        
+                        Write to WAV file... /Users/chloe/Desktop/test_praat/items/'ifile'.wav
                  
                         fileappend "'resultsfile$'" 'ref$' 'start:6' 'end:6' 'ifile' 'sequence$' 'type$' 'place$' 'vowel$' 'kel_syll$' 'speaker$' 'question$' 'echo$' 'newline$'
 
@@ -223,8 +221,7 @@ for ifile to numberOfFiles
             
                         select Sound 'soundname$'
                         Extract part: sequence_start, sequence_end, "rectangular", 1, "yes"
-                        Write to WAV file... 'sound_directory$'/items/'ifile'.wav
-        
+                        Write to WAV file... /Users/chloe/Desktop/test_praat/items/'ifile'.wav
                  
                         fileappend "'resultsfile$'" 'ref$' 'start:6' 'end:6' 'ifile' 'sequence$' 'type$' 'place$' 'vowel$' 'kel_syll$' 'speaker$' 'question$' 'echo$' 'newline$'
 
@@ -264,8 +261,7 @@ for ifile to numberOfFiles
             
                         select Sound 'soundname$'
                         Extract part: sequence_start, sequence_end, "rectangular", 1, "yes"
-                        Write to WAV file... 'sound_directory$'/items/'ifile'.wav
-        
+                        Write to WAV file... /Users/chloe/Desktop/test_praat/items/'ifile'.wav        
                  
                         fileappend "'resultsfile$'" 'ref$' 'start:6' 'end:6' 'ifile' 'sequence$' 'type$' 'place$' 'vowel$' 'kel_syll$' 'speaker$' 'question$' 'echo$' 'newline$'
 
@@ -305,7 +301,7 @@ for ifile to numberOfFiles
             
                         select Sound 'soundname$'
                         Extract part: sequence_start, sequence_end, "rectangular", 1, "yes"
-                        Write to WAV file... 'sound_directory$'/items/'ifile'.wav
+                        Write to WAV file... /Users/chloe/Desktop/test_praat/items/'ifile'.wav
         
                  
                         fileappend "'resultsfile$'" 'ref$' 'start:6' 'end:6' 'ifile' 'sequence$' 'type$' 'place$' 'vowel$' 'kel_syll$' 'speaker$' 'question$' 'echo$' 'newline$'
