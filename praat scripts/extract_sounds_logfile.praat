@@ -40,8 +40,7 @@ for ifile to numberOfFiles
 	filename$ = Get string... ifile
     ref$ = mid$("'filename$'",1,17)
 	speaker$ = mid$("'filename$'",7,3)
-    focus$ = mid$("'filename$",14,1)
-    
+    focus$ = mid$("'filename$'",14,1)
 	Read from file... 'sound_directory$''filename$'
 
 	# get the name of the sound object:
@@ -74,7 +73,7 @@ for ifile to numberOfFiles
                  
                         vowel$ = Get label of interval: 3, i+1
                         sequence$ = segment$ + vowel$
-                        
+                                                
                         type$ = "ejective"
                         place$ = "labial"
                  
@@ -88,13 +87,13 @@ for ifile to numberOfFiles
                  
                         if focus$ = "1" or focus$ = "3" or focus$ = "5" or focus$ = "7" or focus$ = "9"
                             echo$ = "new"
-                        else
-                            if quest$ = "1"
+                        elsif focus$ = "2" or focus$ = "4" or focus$ = "6" or focus$ = "8" or focus$ = "0"
+							if question$ = "question"
                                 echo$ = "new"
-                            else
+                            elsif question$ = "answer"
                                 echo$ = "echo"
                             endif
-                        endif    
+						endif
                         
                         sequence_start = Get start point... 3 i
                         sequence_end = Get end point... 3 i+1
@@ -114,7 +113,7 @@ for ifile to numberOfFiles
                  
                         vowel$ = Get label of interval: 3, i+1
                         sequence$ = segment$ + vowel$
-                        
+                                                
                         type$ = "ejective"
                         place$ = "coronal"
                  
@@ -128,13 +127,13 @@ for ifile to numberOfFiles
                  
                         if focus$ = "1" or focus$ = "3" or focus$ = "5" or focus$ = "7" or focus$ = "9"
                             echo$ = "new"
-                        else
-                            if quest$ = "1"
+                        elsif focus$ = "2" or focus$ = "4" or focus$ = "6" or focus$ = "8" or focus$ = "0"
+							if question$ = "question"
                                 echo$ = "new"
-                            else
+                            elsif question$ = "answer"
                                 echo$ = "echo"
                             endif
-                        endif    
+						endif
                         
                         sequence_start = Get start point... 3 i
                         sequence_end = Get end point... 3 i+1
@@ -142,13 +141,14 @@ for ifile to numberOfFiles
                         select Sound 'soundname$'
                         Extract part: sequence_start, sequence_end, "rectangular", 1, "yes"
                         Write to WAV file... /Users/chloe/Desktop/test_praat/items/'ifile'.wav
-                         
+                 
                         fileappend "'resultsfile$'" 'ref$' 'start:6' 'end:6' 'ifile' 'sequence$' 'type$' 'place$' 'vowel$' 'kel_syll$' 'speaker$' 'question$' 'echo$' 'newline$'
 
                         # select the TextGrid so we can iterate to the next interval:
                         select TextGrid 'soundname$'
-                        
+
                     elsif segment$ = "k>"
+
                         start = Get start point... 'tier' i
                         end = Get end point... 'tier' i
                  
@@ -157,7 +157,7 @@ for ifile to numberOfFiles
                         
                         type$ = "ejective"
                         place$ = "velar"
-                 
+                                     
                         quest$ = mid$("'filename$'",17,1)
                         
                         if quest$ = "1"
@@ -168,13 +168,13 @@ for ifile to numberOfFiles
                  
                         if focus$ = "1" or focus$ = "3" or focus$ = "5" or focus$ = "7" or focus$ = "9"
                             echo$ = "new"
-                        else
-                            if quest$ = "1"
+                        elsif focus$ = "2" or focus$ = "4" or focus$ = "6" or focus$ = "8" or focus$ = "0"
+							if question$ = "question"
                                 echo$ = "new"
-                            else
+                            elsif question$ = "answer"
                                 echo$ = "echo"
                             endif
-                        endif 
+						endif
                         
                         sequence_start = Get start point... 3 i
                         sequence_end = Get end point... 3 i+1
@@ -209,9 +209,9 @@ for ifile to numberOfFiles
                         if focus$ = "1" or focus$ = "3" or focus$ = "5" or focus$ = "7" or focus$ = "9"
                             echo$ = "new"
                         else
-                            if quest$ = "1"
+                            if question$ = "question"
                                 echo$ = "new"
-                            else
+                            elsif question$ = "answer"
                                 echo$ = "echo"
                             endif
                         endif    
@@ -249,9 +249,9 @@ for ifile to numberOfFiles
                         if focus$ = "1" or focus$ = "3" or focus$ = "5" or focus$ = "7" or focus$ = "9"
                             echo$ = "new"
                         else
-                            if quest$ = "1"
+                            if question$ = "question"
                                 echo$ = "new"
-                            else
+                            elsif question$ = "answer"
                                 echo$ = "echo"
                             endif
                         endif    
@@ -277,7 +277,7 @@ for ifile to numberOfFiles
                         
                         type$ = "pulmonic"
                         place$ = "velar"
-                 
+                        
                         quest$ = mid$("'filename$'",17,1)
                         
                         if quest$ = "1"
@@ -289,9 +289,9 @@ for ifile to numberOfFiles
                         if focus$ = "1" or focus$ = "3" or focus$ = "5" or focus$ = "7" or focus$ = "9"
                             echo$ = "new"
                         else
-                            if quest$ = "1"
+                            if question$ = "question"
                                 echo$ = "new"
-                            else
+                            elsif question$ = "answer"
                                 echo$ = "echo"
                             endif
                         endif    
@@ -309,6 +309,7 @@ for ifile to numberOfFiles
                         # select the TextGrid so we can iterate to the next interval:
                         select TextGrid 'soundname$'
                         
+
                     endif
                 
 			endif
@@ -326,4 +327,5 @@ for ifile to numberOfFiles
 endfor
 
 # When everything is done, remove the list of sound file paths:
+select all
 Remove
