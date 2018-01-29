@@ -4,19 +4,19 @@
 ### By question/answer
 ##### Pourquoi ? Parce que je veux savoir si les mêmes résultats chelou apparaissent ou si c'est un artefact
 data_item <- readr::read_delim("data_mono.item", " ")
-distances_newecho <- readr::read_delim("mono_newecho.txt", " ")
+distances_question <- readr::read_delim("mono_question.txt", " ")
 
 library(gridExtra)
 library(plyr)
 library(ggplot2)
-names(distances_newecho)[which(names(distances_newecho)=="d(A, B)")] <- "dist"
+names(distances_question)[which(names(distances_question)=="d(A, B)")] <- "dist"
 
 # Now what are the pairs tested? 
-item_B <- dplyr::select(distances_newecho, dplyr::ends_with("_B"))
+item_B <- dplyr::select(distances_question, dplyr::ends_with("_B"))
 item_B_ <- dplyr::inner_join(item_B, data_item, by=c(file_B="#file", onset_B="onset", offset_B="offset"))
 item_B__ <- dplyr::rename_at(item_B_, names(item_B_)[!endsWith(names(item_B_), "_B")], function(x) paste0(x, "_B"))
 
-item_A <- dplyr::select(distances_newecho, dplyr::ends_with("_A"))
+item_A <- dplyr::select(distances_question, dplyr::ends_with("_A"))
 item_A_ <- dplyr::inner_join(item_A, data_item, by=c(file_A="#file", onset_A="onset", offset_A="offset"))
 item_A__ <- dplyr::rename_at(item_A_, names(item_A_)[!endsWith(names(item_A_), "_A")], function(x) paste0(x, "_A"))
 
@@ -25,9 +25,9 @@ item_B_clean <- item_B__
 item_B_clean$pulm_B <- NULL
 item_B_clean$vowel_B <- NULL
 item_B_clean$position_B <- NULL
+item_B_clean$new_B <- NULL 
 colnames(item_B_clean)[colnames(item_B_clean)=="speaker_B"] <- "speaker"
 colnames(item_B_clean)[colnames(item_B_clean)=="question_B"] <- "question"
-colnames(item_B_clean)[colnames(item_B_clean)=="new_B"] <- "new"
 colnames(item_B_clean)[colnames(item_B_clean)=="place_B"] <- "place"
 
 item_A_clean <- item_A__
@@ -40,7 +40,7 @@ item_A_clean$question_A <- NULL
 item_A_clean$new_A <- NULL
 
 # Selectionne le distance score
-distance_score <- dplyr::select(distances_newecho, dplyr::starts_with("d"))
+distance_score <- dplyr::select(distances_question, dplyr::starts_with("d"))
 
 # Met tout dans un meme tibble
 distances_better <- dplyr::bind_cols(item_A_clean, item_B_clean, distance_score)
@@ -50,11 +50,10 @@ distances_better$offset_A <- NULL
 distances_better$file_B <- NULL
 distances_better$onset_B <- NULL
 distances_better$offset_B <- NULL
-distances_better$question <- NULL
 
 
 # Save file
-write.table(distances_better, "distances_better_newecho.csv", sep = ";", row.names = F, col.names = T, quote = F)
+write.table(distances_better, "distances_better_question.csv", sep = ";", row.names = F, col.names = T, quote = F)
 
 #keeping.order <- function(.data, fn, ...) { 
 #   col <- ".sortColumn"
@@ -77,9 +76,9 @@ names(distances_better)[which(names(distances_better)=="#item_B")] <- "item_B"
 # speaker_column <- dplyr::select(distances_better, dplyr::starts_with("speaker"))
 # phone_columns <- dplyr::select(distances_better, dplyr::starts_with("phone"))
 # distance_column <- dplyr::select(distances_better, dplyr::starts_with("d"))
-# newecho_column <- dplyr::select(distances_better, dplyr::starts_with("new_A"))
+# question_column <- dplyr::select(distances_better, dplyr::starts_with("new_A"))
 # question_column <- dplyr::select(distances_better, dplyr::starts_with("ques"))
-#better_table_distances <- dplyr::bind_cols(how_many_repetitons_all, speaker_column, phone_columns, distance_column, newecho_column, question_column)
+#better_table_distances <- dplyr::bind_cols(how_many_repetitons_all, speaker_column, phone_columns, distance_column, question_column, question_column)
 
 # Plot the results
 some_plot <- ggplot2::ggplot(data=distances_better, ggplot2::aes(x=dist)) +
@@ -104,7 +103,7 @@ print(some_other_plot)
 
 new_plot <- ggplot2::ggplot(distances_better, ggplot2::aes(x = as.factor(speaker), y=dist, fill=place)) +
   ggplot2::geom_boxplot() + 
-  ggplot2::facet_grid(same_value~new) +#, labeller = labeller(question = labels)) +
+  ggplot2::facet_grid(same_value~question) +#, labeller = labeller(question = labels)) +
   ggplot2::theme_minimal() #+
 #ggplot2::scale_fill_discrete(name="Condition tested", labels=c("Ejective-Aspirate", "Ejective-Ejective,\n or Aspirate-Aspirate"))
 # Grosse difference entre les speakers
@@ -114,6 +113,6 @@ print(new_plot)
 
 plot_question <- ggplot2::ggplot(distances_better, ggplot2::aes(x = as.factor(place), y=dist, fill=same_value)) +
   ggplot2::geom_boxplot(position = "dodge") + 
-  ggplot2::facet_grid(speaker~new) +#, labeller = labeller(question = labels)) +
+  ggplot2::facet_grid(speaker~question) +#, labeller = labeller(question = labels)) +
   ggplot2::theme_minimal()
 print(plot_question)

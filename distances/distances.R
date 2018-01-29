@@ -4,8 +4,8 @@ library(ggplot2)
 
 ########################################################################
 # Files
-distances <- readr::read_delim("by_vowel_distances_initial.txt", " ")
-item <- readr::read_delim("data_initial.item", " ")
+distances <- readr::read_delim("./mono/mono_newecho.txt", " ")
+item <- readr::read_delim("./mono/data_mono.item", " ")
 
 ########################################################################
 # Sort distances - output dis2txt file - tokens in initial position
@@ -56,8 +56,9 @@ item_B_clean$pulm_B <- NULL
 item_B_clean$place_B <- NULL
 item_B_clean$vowel_B <- NULL
 item_B_clean$position_B <- NULL
+item_B_clean$question <- NULL
 colnames(item_B_clean)[colnames(item_B_clean)=="speaker_B"] <- "speaker"
-colnames(item_B_clean)[colnames(item_B_clean)=="question_B"] <- "question"
+colnames(item_B_clean)[colnames(item_B_clean)=="new_B"] <- "new"
 
 item_A_clean <- item_A__
 item_A_clean$pulm_A <- NULL
@@ -84,8 +85,8 @@ how_many_repetitons_all <- ddply(.data = distances_better,.(item_A,item_B),nrow)
 speaker_column <- dplyr::select(distances_better, dplyr::starts_with("speaker"))
 phone_columns <- dplyr::select(distances_better, dplyr::starts_with("phone"))
 distance_column <- dplyr::select(distances_better, dplyr::starts_with("d"))
-question_column <- dplyr::select(distances_better, dplyr::starts_with("ques"))
-better_table_distances <- dplyr::bind_cols(how_many_repetitons_all, speaker_column, phone_columns, distance_column, question_column)
+new_column <- dplyr::select(distances_better, dplyr::starts_with("new"))
+better_table_distances <- dplyr::bind_cols(how_many_repetitons_all, speaker_column, phone_columns, distance_column, new_column)
 
 # Plot the results
 some_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=dist)) +
@@ -111,7 +112,7 @@ print(some_other_plot)
 labels <- c(a = "Answer", q = "Question")
 new_plot <- ggplot2::ggplot(better_table_distances, ggplot2::aes(x = as.factor(speaker), y=dist, fill=same_value)) +
   ggplot2::geom_boxplot() + 
-  ggplot2::facet_grid(~question, labeller = labeller(question = labels)) +
+  ggplot2::facet_grid(~new, labeller = labeller(question = labels)) +
   ggplot2::theme_minimal() +
   ggplot2::scale_fill_discrete(name="Condition tested", labels=c("Ejective-Aspirate", "Ejective-Ejective,\n or Aspirate-Aspirate"))
 # Grosse difference entre les speakers
