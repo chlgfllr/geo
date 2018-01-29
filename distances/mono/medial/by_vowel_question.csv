@@ -1,0 +1,18 @@
+pulm_2	pulm_1	by	score	n
+pulmonic	ejective	('s09', 'answer', 'labial', 'i')	0.333333333333	6
+pulmonic	ejective	('s09', 'question', 'velar', 'i')	0.416666666667	12
+ejective	pulmonic	('s08', 'question', 'labial', 'a')	0.428571428571	42
+pulmonic	ejective	('s09', 'answer', 'velar', 'i')	1.0	2
+ejective	pulmonic	('s09', 'question', 'labial', 'i')	0.625	8
+pulmonic	ejective	('s09', 'question', 'labial', 'i')	0.458333333333	24
+ejective	pulmonic	('s08', 'answer', 'velar', 'i')	1.0	10
+pulmonic	ejective	('s08', 'answer', 'velar', 'i')	0.475	40
+ejective	pulmonic	('s09', 'question', 'labial', 'a')	0.611111111111	36
+pulmonic	ejective	('s09', 'question', 'labial', 'a')	0.583333333333	24
+pulmonic	ejective	('s08', 'question', 'velar', 'i')	0.45	20
+ejective	pulmonic	('s09', 'answer', 'labial', 'a')	0.75	36
+pulmonic	ejective	('s09', 'answer', 'labial', 'a')	0.25	24
+ejective	pulmonic	('s08', 'question', 'labial', 'i')	1.0	8
+pulmonic	ejective	('s08', 'question', 'labial', 'i')	0.625	24
+ejective	pulmonic	('s08', 'answer', 'labial', 'i')	1.0	8
+pulmonic	ejective	('s08', 'answer', 'labial', 'i')	0.375	24
