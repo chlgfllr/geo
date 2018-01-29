@@ -1,0 +1,26 @@
+pulm_2	pulm_1	by	score	n
+ejective	pulmonic	('s09', 'new', 'labial', 'a')	0.596875	3520
+pulmonic	ejective	('s09', 'new', 'labial', 'a')	0.460593841642	10912
+ejective	pulmonic	('s09', 'new', 'velar', 'e')	0.606060606061	66
+pulmonic	ejective	('s09', 'new', 'velar', 'e')	0.660606060606	330
+pulmonic	ejective	('s08', 'echo', 'velar', 'e')	0.75	12
+ejective	pulmonic	('s09', 'new', 'coronal', 'o')	0.75	4
+pulmonic	ejective	('s09', 'new', 'coronal', 'o')	0.25	4
+pulmonic	ejective	('s09', 'echo', 'coronal', 'e')	0.583333333333	12
+ejective	pulmonic	('s08', 'echo', 'labial', 'a')	0.493333333333	300
+pulmonic	ejective	('s08', 'echo', 'labial', 'a')	0.492592592593	540
+ejective	pulmonic	('s08', 'new', 'velar', 'e')	1.0	20
+pulmonic	ejective	('s08', 'new', 'velar', 'e')	0.383333333333	180
+ejective	pulmonic	('s08', 'new', 'coronal', 'e')	0.545454545455	66
+pulmonic	ejective	('s08', 'new', 'coronal', 'e')	0.451515151515	330
+pulmonic	ejective	('s08', 'echo', 'coronal', 'e')	0.583333333333	12
+pulmonic	ejective	('s08', 'new', 'velar', 'a')	0.857142857143	756
+ejective	pulmonic	('s08', 'new', 'labial', 'a')	0.650023719165	8432
+pulmonic	ejective	('s08', 'new', 'labial', 'a')	0.456103731815	15810
+ejective	pulmonic	('s08', 'new', 'coronal', 'o')	0.916666666667	12
+pulmonic	ejective	('s08', 'new', 'coronal', 'o')	0.666666666667	6
+ejective	pulmonic	('s09', 'echo', 'labial', 'a')	0.472222222222	72
+pulmonic	ejective	('s09', 'echo', 'labial', 'a')	0.532828282828	396
+pulmonic	ejective	('s09', 'echo', 'velar', 'e')	0.583333333333	12
+ejective	pulmonic	('s09', 'new', 'coronal', 'e')	0.424242424242	66
+pulmonic	ejective	('s09', 'new', 'coronal', 'e')	0.424242424242	330

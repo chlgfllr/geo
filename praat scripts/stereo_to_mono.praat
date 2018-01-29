@@ -12,7 +12,7 @@
 # dbrenner atmark email dot arizona dot edu
 #~#~#~#~#~#~#~#~#~#~#~#~#~#~#~#~#~#~#~#
 
-dir$ = chooseDirectory$ ("C:\Users\chloe_000\Desktop\data")
+dir$ = chooseDirectory$ ("/Users/chloe/OneDrive/Documents/M2/2017-2018/georgian_suite/audio_files/resampled_mono/")
 printline 'dir$'/
 
 wavlist = Create Strings as file list... wl 'dir$'/*.wav

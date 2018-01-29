@@ -102,7 +102,6 @@ some_other_plot <- ggplot2::ggplot(data=distances_better, ggplot2::aes(x=dist)) 
 # On voit qu'il y a une difference assez evidente de distribution des resultats entre les deux speakers, mais pas forcement en fonction du contraste teste
 print(some_other_plot)
 
-labels <- c(a = "Answer", q = "Question")
 new_plot <- ggplot2::ggplot(distances_better, ggplot2::aes(x = as.factor(speaker), y=dist, fill=place)) +
   ggplot2::geom_boxplot() + 
   ggplot2::facet_grid(same_value~new) +#, labeller = labeller(question = labels)) +
@@ -130,12 +129,12 @@ item_A_question__ <- dplyr::rename_at(item_A_question_, names(item_A_question_)[
 # Prepare les colonnes qui m interessent dans A et B
 item_B_question_clean <- item_B_question__
 item_B_question_clean$pulm_B <- NULL
-item_B_question_clean$place_B <- NULL
 item_B_question_clean$vowel_B <- NULL
 item_B_question_clean$position_B <- NULL
 colnames(item_B_question_clean)[colnames(item_B_question_clean)=="speaker_B"] <- "speaker"
 colnames(item_B_question_clean)[colnames(item_B_question_clean)=="question_B"] <- "question"
 colnames(item_B_question_clean)[colnames(item_B_question_clean)=="new_B"] <- "new"
+colnames(item_B_question_clean)[colnames(item_B_question_clean)=="place_B"] <- "place"
 
 item_A_question_clean <- item_A_question__
 item_A_question_clean$pulm_A <- NULL
@@ -198,16 +197,19 @@ some_other_plot_question <- ggplot2::ggplot(data=distances_better_question, ggpl
 # On voit qu'il y a une difference assez evidente de distribution des resultats entre les deux speakers, mais pas forcement en fonction du contraste teste
 print(some_other_plot_question)
 
-labels <- c(a = "Answer", q = "Question")
-new_plot_question <- ggplot2::ggplot(distances_better_question, ggplot2::aes(x = as.factor(speaker), y=dist, fill=phone_B)) +
+new_plot_question <- ggplot2::ggplot(distances_better_question, ggplot2::aes(x = as.factor(speaker), y=dist, fill=place)) +
   ggplot2::geom_boxplot() + 
-  ggplot2::facet_wrap(same_value~question) +#, labeller = labeller(question = labels)) +
+  ggplot2::facet_grid(same_value~question) +#, labeller = labeller(question = labels)) +
   ggplot2::theme_minimal() #+
 #ggplot2::scale_fill_discrete(name="Condition tested", labels=c("Ejective-Aspirate", "Ejective-Ejective,\n or Aspirate-Aspirate"))
 # Grosse difference entre les speakers
 print(new_plot_question)
 
 
-
 grid.arrange(new_plot, new_plot_question, nrow=2)
 
+plot_question <- ggplot2::ggplot(distances_better_question, ggplot2::aes(x = as.factor(place), y=dist, fill=same_value)) +
+  ggplot2::geom_boxplot(position = "dodge") + 
+  ggplot2::facet_grid(speaker~question) +#, labeller = labeller(question = labels)) +
+  ggplot2::theme_minimal()
+print(plot_question)
