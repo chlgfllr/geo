@@ -107,3 +107,10 @@ plot_question <- ggplot2::ggplot(distances_better, ggplot2::aes(x = as.factor(pl
   ggplot2::facet_grid(speaker~question) +#, labeller = labeller(question = labels)) +
   ggplot2::theme_minimal()
 print(plot_question)
+
+other_plot <- ggplot2::ggplot(distances_better, ggplot2::aes(x = as.factor(place), y=dist, fill=question)) +
+  ggplot2::geom_boxplot(position = "dodge") + 
+  ggplot2::facet_grid(speaker~same_value) +#, labeller = labeller(question = labels)) +
+  ggplot2::theme_minimal()
+print(other_plot)
+
