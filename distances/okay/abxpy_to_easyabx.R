@@ -27,4 +27,5 @@ mean_dur <- mean(data_item_$duration)
 fixed_length <- qu1_constriction + mean_vowel
 
 ## ABXpy run on fixed length window
-data <- readr::read_delim("/Users/chloe/geo/fixed_length/data_fixed.csv", "\t")
+distances <- readr::read_delim("/Users/chloe/geo/fixed_length/data_fixed.csv", "\t")
+data <- readr::read_delim("/Users/chloe/geo/fixed_length/data_fixed.item", " ")
