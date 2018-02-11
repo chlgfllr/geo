@@ -15,6 +15,7 @@ min_constriction <- min(acoustic$constriction_norm)
 ## the constriction time. 
 acoustic$vowel_oral_burst <- acoustic$`v-duration` + acoustic$interburst
 mean_vowel <- mean(acoustic$vowel_oral_burst)
+qu1_vowel <- as.numeric(quantile(acoustic$vowel_oral_burst, .25))
 
 data_item_ <- readr::read_delim("data_okay.item", " ")
 
@@ -24,7 +25,8 @@ mean_dur <- mean(data_item_$duration)
 
 ## We had a mean CV window duration of mean_dur
 ## We will now have a shorter window of min_constriction + mean_vowel
-fixed_length <- qu1_constriction + mean_vowel
+fixed_mean <- min_constriction + mean_vowel
+fixed_qu1 <- min_constriction + qu1_vowel
 
 ## ABXpy run on fixed length window
 distances <- readr::read_delim("/Users/chloe/geo/fixed_length/data_fixed.csv", "\t")
