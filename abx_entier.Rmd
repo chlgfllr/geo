@@ -77,12 +77,12 @@ item_v_A__ <- dplyr::rename_at(item_v_A_, names(item_v_A_)[!endsWith(names(item_
 # Prepare les colonnes qui m interessent dans A et B
 item_v_B_clean <- item_v_B__
 item_v_B_clean$pulm_B <- NULL
-item_v_B_clean$place_B <- NULL
 item_v_B_clean$vowel_B <- NULL
 item_v_B_clean$position_B <- NULL
 item_v_B_clean$new_B <- NULL
 colnames(item_v_B_clean)[colnames(item_v_B_clean)=="speaker_B"] <- "speaker"
 colnames(item_v_B_clean)[colnames(item_v_B_clean)=="question_B"] <- "question"
+colnames(item_v_B_clean)[colnames(item_v_B_clean)=="place_B"] <- "place"
 
 item_v_A_clean <- item_v_A__
 item_v_A_clean$pulm_A <- NULL
@@ -107,10 +107,22 @@ names(distances_v_better)[which(names(distances_v_better)=="dist")] <- "dist_var
 names(distances_v_better)[which(names(distances_v_better)=="#item_A")] <- "item_A"
 names(distances_v_better)[which(names(distances_v_better)=="#item_B")] <- "item_B"
 
-#################
+###########
+# Put the two things in the same tableau
 distances_even_better <- dplyr::inner_join(distances_f_better, distances_v_better, by=c(item_A="item_A", item_B="item_B", file_A="file_A", file_B="file_B", phone_A="phone_A", phone_B="phone_B", speaker="speaker", question="question"))
 distances_even_better$onset_A <- NULL
 distances_even_better$offset_A <- NULL
 distances_even_better$onset_B <- NULL
 distances_even_better$offset_B <- NULL
 ```
+
+```{r}
+ggplot(distances_even_better, aes(x = as.factor(place), y = value, color = variable)) + 
+    geom_boxplot(aes(y = dist_fixed, col = "dist_fixed")) + 
+    geom_boxplot(aes(y = dist_variable, col = "dist_variable")) +
+    ggplot2::facet_grid(speaker~ .) +
+    ggplot2::theme_minimal()
+
+
+```
+
