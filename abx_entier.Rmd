@@ -1,0 +1,103 @@
+---
+title: "ABX"
+output: html_document
+---
+
+```{r}
+library(plyr)
+library(ggplot2)
+```
+
+Files qu'on utilise
+```{r warning = FALSE}
+variable_results <- readr::read_delim("./distances/okay/by_vowel_okay.csv", " ")
+variable_distances <- readr::read_delim("./distances/okay/distances_okay.txt", " ")
+fixed_results <- readr::read_delim("./fixed_length/qu1_v/data_fixed.csv", ";")
+fixed_distances <- readr::read_delim("./fixed_length/qu1_v/data_fixed.txt", " ")
+item <- readr::read_delim("./fixed_length/qu1_v/data_fixed.item", " ")
+
+names(fixed_distances)[which(names(fixed_distances)=="d(A, B)")] <- "dist"
+# Now what are the pairs tested? 
+item_B <- dplyr::select(fixed_distances, dplyr::ends_with("_B"))
+item_B_ <- dplyr::inner_join(item_B, item, by=c(file_B="#file", onset_B="onset", offset_B="offset"))
+item_B__ <- dplyr::rename_at(item_B_, names(item_B_)[!endsWith(names(item_B_), "_B")], function(x) paste0(x, "_B"))
+
+item_A <- dplyr::select(fixed_distances, dplyr::ends_with("_A"))
+item_A_ <- dplyr::inner_join(item_A, item, by=c(file_A="#file", onset_A="onset", offset_A="offset"))
+item_A__ <- dplyr::rename_at(item_A_, names(item_A_)[!endsWith(names(item_A_), "_A")], function(x) paste0(x, "_A"))
+
+# Prepare les colonnes qui m interessent dans A et B
+item_B_clean <- item_B__
+item_B_clean$pulm_B <- NULL
+item_B_clean$place_B <- NULL
+item_B_clean$vowel_B <- NULL
+item_B_clean$position_B <- NULL
+item_B_clean$new_B <- NULL
+colnames(item_B_clean)[colnames(item_B_clean)=="speaker_B"] <- "speaker"
+colnames(item_B_clean)[colnames(item_B_clean)=="question_B"] <- "question"
+
+item_A_clean <- item_A__
+item_A_clean$pulm_A <- NULL
+item_A_clean$place_A <- NULL
+item_A_clean$vowel_A <- NULL
+item_A_clean$position_A <- NULL
+item_A_clean$speaker_A <- NULL
+item_A_clean$question_A <- NULL
+item_A_clean$new_A <- NULL
+
+# Selectionne le distance score
+distance_score <- dplyr::select(fixed_distances, dplyr::starts_with("d"))
+
+# Met tout dans un meme tibble
+distances_better <- dplyr::bind_cols(item_A_clean, item_B_clean, distance_score)
+
+# Create a new table with fewer information                   
+names(distances_better)[which(names(distances_better)=="#item_A")] <- "item_A"
+names(distances_better)[which(names(distances_better)=="#item_B")] <- "item_B"
+
+distances_even_better <- distances_better
+distances_even_better$onset_A <- NULL
+distances_even_better$offset_A <- NULL
+distances_even_better$onset_B <- NULL
+distances_even_better$offset_B <- NULL
+names(distances_even_better)[which(names(distances_even_better)=="dist")] <- "dist_fixed"
+
+# how_many_repetitons_all <- ddply(.data = distances_better,.(item_A,item_B),nrow)
+# Create subsets
+# speaker_column <- dplyr::select(distances_better, dplyr::starts_with("speaker"))
+# phone_columns <- dplyr::select(distances_better, dplyr::starts_with("phone"))
+# distance_column <- dplyr::select(distances_better, dplyr::starts_with("d"))
+# new_column <- dplyr::select(distances_better, dplyr::starts_with("new"))
+# better_table_distances <- dplyr::bind_cols(how_many_repetitons_all, speaker_column, phone_columns, distance_column, new_column)
+
+# Plot the results
+some_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=dist)) +
+  ggplot2::geom_histogram() +
+  ggplot2::facet_wrap(~ speaker) #, scales = 'free_y')
+print(some_plot)
+
+better_table_distances$glottal_A <- ifelse(grepl(">", better_table_distances$phone_A), "ejective", "aspirate")
+better_table_distances$glottal_B <- ifelse(grepl(">", better_table_distances$phone_B), "ejective", "aspirate")
+better_table_distances$same_value <- better_table_distances$glottal_A == better_table_distances$glottal_B
+better_table_distances$same_value <- ifelse(better_table_distances$same_value == "FALSE", "contrast", "same")
+
+# better_table_distances$contrast_tested <- better_table_distances$same_value
+# better_table_distances$contrast_tested <- ifelse(better_table_distances$glottal_A == "ejective", "ejective", "aspirate")
+
+some_other_plot <- ggplot2::ggplot(data=better_table_distances, ggplot2::aes(x=dist)) +
+  ggplot2::geom_histogram() +
+  ggplot2::geom_vline(data = better_table_distances, xintercept=median(better_table_distances$dist, color = "red")) +
+  ggplot2::facet_wrap(same_value ~ speaker) #, scales = 'free_y') 
+# On voit qu'il y a une difference assez evidente de distribution des resultats entre les deux speakers, mais pas forcement en fonction du contraste teste
+print(some_other_plot)
+
+labels <- c(a = "Answer", q = "Question")
+new_plot <- ggplot2::ggplot(better_table_distances, ggplot2::aes(x = as.factor(speaker), y=dist, fill=same_value)) +
+  ggplot2::geom_boxplot() + 
+  ggplot2::facet_grid(~new, labeller = labeller(question = labels)) +
+  ggplot2::theme_minimal() +
+  ggplot2::scale_fill_discrete(name="Condition tested", labels=c("Ejective-Aspirate", "Ejective-Ejective,\n or Aspirate-Aspirate"))
+# Grosse difference entre les speakers
+print(new_plot)
+
+```
