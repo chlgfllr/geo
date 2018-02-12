@@ -4,8 +4,8 @@ library(ggplot2)
 
 ########################################################################
 # Files
-distances <- readr::read_delim("./mono/mono_newecho.txt", " ")
-item <- readr::read_delim("./mono/data_mono.item", " ")
+distances <- readr::read_delim("./distances/mono/initial/mono_newecho.txt", " ")
+item <- readr::read_delim("./distances/mono/initial/data_mono.item", " ")
 
 ########################################################################
 # Sort distances - output dis2txt file - tokens in initial position
