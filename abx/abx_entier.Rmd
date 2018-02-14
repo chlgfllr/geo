@@ -1,0 +1,96 @@
+---
+title: "ABX"
+output: html_document
+---
+
+```{r}
+#    sed -e "s/, '/,'/g" results.csv > TMP; mv TMP results.csv
+#    sed -e "s/^[0-9]* //" distances.txt > TMP; mv TMP distances.txt
+
+
+library(plyr)
+library(ggplot2)
+
+read_distances <- function(data_folder) {
+  # Files utilisés
+  distances <- readr::read_delim(paste0(data_folder, "/distances.txt"), " ")
+  items <- readr::read_delim(paste0(data_folder, "/abx.item"), " ")
+
+  # Change column names because why not
+  names(distances)[which(names(distances)=="d(A, B)")] <- "dist"
+
+  ####################
+  items_B <- dplyr::select(distances, dplyr::ends_with("_B"))
+  items_B_ <- dplyr::inner_join(items_B, items,
+                                    by=c(file_B="#file", onset_B="onset", 
+                                         offset_B="offset"))
+  items_B__ <- dplyr::rename_at(items_B_, 
+                  names(items_B_)[!endsWith(names(items_B_), "_B")], 
+                  function(x) paste0(x, "_B"))
+  items_B_clean <- items_B__
+  items_B_clean$pulm_B <- NULL
+  items_B_clean$vowel_B <- NULL
+  items_B_clean$position_B <- NULL
+  items_B_clean$new_B <- NULL
+
+  items_A <- dplyr::select(distances, dplyr::ends_with("_A"))
+  items_A_ <- dplyr::inner_join(items_A, items,
+                                    by=c(file_A="#file", onset_A="onset", 
+                                         offset_A="offset"))
+  items_A__ <- dplyr::rename_at(items_A_, 
+                  names(items_A_)[!endsWith(names(items_A_), "_A")], 
+                  function(x) paste0(x, "_A"))
+  items_A_clean <- items_A__
+  items_A_clean$pulm_A <- NULL
+  items_A_clean$vowel_A <- NULL
+  items_A_clean$position_A <- NULL
+  items_A_clean$new_A <- NULL
+
+  # Selectionne le distance score
+  distance_score <- dplyr::select(distances, "dist")
+
+  # Met tout dans un meme tibble
+  distances_better <- dplyr::bind_cols(items_A_clean, items_B_clean, distance_score)
+  distances_better$onset_A <- NULL
+  distances_better$offset_A <- NULL
+  distances_better$onset_B <- NULL
+  distances_better$offset_B <- NULL
+  # Create a new table with less information                   
+  names(distances_better)[which(names(distances_better)=="#item_A")] <- "item_A"
+  names(distances_better)[which(names(distances_better)=="#item_B")] <- "item_B"
+  
+  distances_better$ejective_A <- grepl(">", distances_better$phone_A)
+  distances_better$ejective_B <- grepl(">", distances_better$phone_B)
+  
+  distances_better <- dplyr::mutate(distances_better,
+                                    same=ifelse(ejective_A == ejective_B,
+                                                "SAME", "DIFFERENT"))
+
+  return(distances_better)
+}
+
+```
+
+
+```{r warning = FALSE}
+distances_fixed <- read_distances("fixed")
+distances_fixed$experiment <- "fixed"
+distances_variable <- read_distances("variable")
+distances_variable$experiment <- "variable"
+
+distances <- dplyr::bind_rows(distances_fixed, distances_variable)
+distances$place <- distances$place_A # know this because experiment was BY place, speaker
+distances$speaker <- distances$speaker_A 
+distances$question <- distances$question_A 
+```
+
+
+```{r}
+ggplot(distances,
+       aes(x = place, y = dist, fill=same)) + 
+    ggplot2::geom_violin(position="dodge") +
+    ggplot2::facet_grid(speaker ~ experiment) +
+    ggplot2::theme_minimal()
+
+```
+
