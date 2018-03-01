@@ -1,0 +1,18 @@
+pulm_2	pulm_1	by	score	n
+ejective	pulmonic	('o', 'coronal', 'question')	0.472222222222	36
+pulmonic	ejective	('o', 'coronal', 'question')	0.541666666667	24
+ejective	pulmonic	('a', 'labial', 'question')	0.76658496732	12240
+pulmonic	ejective	('a', 'labial', 'question')	0.611586452763	33660
+pulmonic	ejective	('a', 'velar', 'question')	0.60487804878	1640
+ejective	pulmonic	('e', 'coronal', 'question')	0.526041666667	192
+pulmonic	ejective	('e', 'coronal', 'question')	0.672916666667	960
+ejective	pulmonic	('e', 'velar', 'question')	0.544444444444	90
+pulmonic	ejective	('e', 'velar', 'question')	0.61746031746	630
+ejective	pulmonic	('e', 'coronal', 'answer')	0.642857142857	168
+pulmonic	ejective	('e', 'coronal', 'answer')	0.675824175824	728
+ejective	pulmonic	('a', 'labial', 'answer')	0.759605263158	15200
+pulmonic	ejective	('a', 'labial', 'answer')	0.595192307692	31200
+ejective	pulmonic	('o', 'coronal', 'answer')	1.0	4
+pulmonic	ejective	('o', 'coronal', 'answer')	1.0	4
+ejective	pulmonic	('e', 'velar', 'answer')	0.684523809524	168
+pulmonic	ejective	('e', 'velar', 'answer')	0.593406593407	728
