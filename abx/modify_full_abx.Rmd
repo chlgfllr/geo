@@ -1,0 +1,22 @@
+---
+title: "Modify full_abx.item generated with a Praat script"
+output: html_document
+---
+
+`create_datafile.praat` generates an abx.item file with metalinguistic parameters and acoustic measures. It also contains two sets of onset/offset times:
+
+- onset_v and offset_v = variable window. Onset is the beginning of the consonant, offset is the end point of the following vowel. Gives times for the CV sequence where C is a stop (aspirated or ejective) preceded by a word boundary, and V is a vowel 
+- onset_f and offset_f = fixed width. Onset is set as the minimum constriction time found in the data (here 20ms), offset is the mean vowel duration found in the data (here 109ms). Fixed width window is aligned on the oral burst. 
+
+# What does this do?
+We want to delete some of the columns which were created in the `full_abx.item` to use resulting `abx.item` files in ABXpy and easy_abx tests. 
+
+Choose which window setting to use
+```{r}
+datafile <- readr::read_delim("full_abx.item", " ")
+datafile_ <- dplyr::rename_at(datafile, 
+                  names(datafile)[startsWith(names(datafile), "item")], 
+                  function(x) paste0("#", x))
+datafile_$X19 <- NULL
+```
+
