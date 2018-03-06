@@ -13,7 +13,7 @@ library(ggplot2)
 
 read_distances <- function(data_folder) {
   # Files utilisés
-  distances <- readr::read_delim(paste0(data_folder, "/distances.txt"), " ")
+  distances <- readr::read_delim(paste0(data_folder, "/distance.txt"), " ")
   items <- readr::read_delim(paste0(data_folder, "/abx.item"), " ")
 
   # Change column names because why not
@@ -87,7 +87,7 @@ distances$question <- distances$question_A
 
 ```{r}
 ggplot(distances,
-       aes(x = place, y = dist, fill=same)) + 
+       aes(x = place, , y = dist, fill=same)) + 
     ggplot2::geom_violin(position="dodge") +
     ggplot2::facet_grid(speaker ~ experiment) +
     ggplot2::theme_minimal()

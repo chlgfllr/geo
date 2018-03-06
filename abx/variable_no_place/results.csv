@@ -1,0 +1,22 @@
+pulm_2	pulm_1	by	score	n
+ejective	pulmonic	('s08', 'answer', 1, 'o')	0.830357142857	112
+pulmonic	ejective	('s08', 'answer', 1, 'o')	1.0	16
+ejective	pulmonic	('s09', 'answer', 1, 'a')	0.93712797619	2688
+pulmonic	ejective	('s09', 'answer', 1, 'a')	0.597129875887	18048
+ejective	pulmonic	('s08', 'question', 1, 'a')	0.850343053173	6996
+pulmonic	ejective	('s08', 'question', 1, 'a')	0.584633526851	33072
+ejective	pulmonic	('s08', 'question', 1, 'o')	0.722222222222	72
+ejective	pulmonic	('s08', 'answer', 1, 'a')	0.88234384663	6468
+pulmonic	ejective	('s08', 'answer', 1, 'a')	0.645727040816	28224
+ejective	pulmonic	('s09', 'question', 1, 'e')	0.600877192982	228
+pulmonic	ejective	('s09', 'question', 1, 'e')	0.733187134503	1368
+ejective	pulmonic	('s08', 'answer', 1, 'e')	0.744047619048	168
+pulmonic	ejective	('s08', 'answer', 1, 'e')	0.774725274725	728
+ejective	pulmonic	('s09', 'answer', 1, 'e')	0.723958333333	192
+pulmonic	ejective	('s09', 'answer', 1, 'e')	0.707291666667	960
+ejective	pulmonic	('s09', 'question', 1, 'a')	0.899415204678	1710
+pulmonic	ejective	('s09', 'question', 1, 'a')	0.700971177945	19152
+ejective	pulmonic	('s09', 'question', 1, 'o')	0.607142857143	112
+pulmonic	ejective	('s09', 'question', 1, 'o')	1.0	16
+ejective	pulmonic	('s08', 'question', 1, 'e')	0.950980392157	102
+pulmonic	ejective	('s08', 'question', 1, 'e')	0.841911764706	816

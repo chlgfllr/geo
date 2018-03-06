@@ -14,9 +14,17 @@ We want to delete some of the columns which were created in the `full_abx.item` 
 Choose which window setting to use
 ```{r}
 datafile <- readr::read_delim("full_abx.item", " ")
-datafile_ <- dplyr::rename_at(datafile, 
-                  names(datafile)[startsWith(names(datafile), "item")], 
+datafile <- dplyr::rename_at(datafile, 
+                  names(datafile["item"]), 
                   function(x) paste0("#", x))
-datafile_$X19 <- NULL
+datafile$X19 <- NULL
+
+# Choose between fixed or variable window (uncomment one)
+datafile$onset_f <- NULL
+datafile$offset_f <- NULL
+
+datafile_ <- dplyr::select_if(datafile, 
+                             grepl("_", datafile))
+
 ```
 

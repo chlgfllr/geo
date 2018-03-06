@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=fixed
+DIR=features_all
 
 FEATURE_FILE=mono_mfcc.h5f
 ITEM_FILE=$DIR/abx.item
